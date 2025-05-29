@@ -1,6 +1,7 @@
 // lib/stripe.ts
 import Stripe from 'stripe'
-import { auth } from './firebase'
+import { auth, db, firebaseAdmin } from '@/lib/firebase'
+import { doc, setDoc } from 'firebase/firestore'
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
@@ -29,6 +30,11 @@ export async function createSubscription(
     metadata: { firebaseUID: user.uid },
   })
 
+  // Save the Stripe customer ID to Firestore
+  await setDoc(doc(db, 'users', userId), {
+    stripeCustomerId: customer.id,
+  }, { merge: true }); // Use merge: true to avoid overwriting other user data
+
   const subscription = await stripe.subscriptions.create({
     customer: customer.id,
     items: [{ price: priceId }],
@@ -42,10 +48,11 @@ export async function createSubscription(
       .payment_intent as Stripe.PaymentIntent
   }
 }
-
 export async function createCheckoutSession(userId: string, priceId: string) {
+
     const session = await stripe.checkout.sessions.create({
-      customer: userId,
+ // Find or create a Stripe customer for the user
+ customer: userId, // Assuming userId is the Stripe customer ID
       payment_method_types: ['card'],
       line_items: [{
         price: priceId,
@@ -57,6 +64,7 @@ export async function createCheckoutSession(userId: string, priceId: string) {
     })
     return session.id
   }
+
   
 // Webhook handler
 export async function handleStripeWebhook(req: Request) {
@@ -81,12 +89,70 @@ export async function handleStripeWebhook(req: Request) {
       const session = event.data.object as Stripe.Checkout.Session
       await handleCheckoutSession(session)
       break
+    case 'customer.subscription.created':
+      const createdSubscription = event.data.object as Stripe.Subscription;
+      console.log(`Subscription created: ${createdSubscription.id}`);
+      await updateUserSubscription(createdSubscription);
+      break;
     case 'customer.subscription.updated':
       const subscription = event.data.object as Stripe.Subscription
-      await updateUserSubscription(subscription)
+      // Update the user's subscription status in your database
+ await updateUserSubscription(subscription);
+      break;
+    case 'customer.subscription.deleted':
+      const deletedSubscription = event.data.object as Stripe.Subscription
+      // Handle subscription cancellation in your database
+ await handleSubscriptionDeleted(deletedSubscription);
       break
     // Add more event handlers
   }
 
   return new Response(JSON.stringify({ received: true }))
+}
+
+// Helper function to handle completed checkout sessions
+async function handleCheckoutSession(session: Stripe.Checkout.Session) {
+  const customerId = session.customer as string;
+  const subscriptionId = session.subscription as string;
+
+  console.log(`Checkout session completed for customer ${customerId}, subscription ${subscriptionId}`);
+
+  // Find the user in your database using the stripeCustomerId and update their record
+  // Note: This assumes you have a way to find a user based on their stripeCustomerId.
+  // A common approach is to query the 'users' collection for a document with a matching stripeCustomerId.
+  // For this example, we'll assume you can directly use the customerId to find the user document.
+  // You might need to adjust this based on how you store the stripeCustomerId.
+  await setDoc(doc(db, 'users', customerId), { // Assuming customerId is the user's doc ID
+    stripeSubscriptionId: subscriptionId,
+    stripeSubscriptionStatus: 'active', // Or the status from the session object if available
+  }, { merge: true });
+}
+
+// Helper function to update user subscription details in your database
+async function updateUserSubscription(subscription: Stripe.Subscription) {
+  const customerId = subscription.customer as string;
+  const status = subscription.status;
+  const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
+
+  // Find the user in your database using the customerId
+  // Update the user's subscription status and end date
+  console.log(`Subscription updated for customer ${customerId}: status ${status}, ends ${currentPeriodEnd}`);
+
+  // Update the user's document with the latest subscription status and end date
+  await setDoc(doc(db, 'users', customerId), { // Assuming customerId is the user's doc ID
+    stripeSubscriptionStatus: status,
+    stripeSubscriptionPeriodEnd: currentPeriodEnd,
+  }, { merge: true });
+}
+
+// Helper function to handle deleted subscriptions
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const customerId = subscription.customer as string;
+
+  // Mark the user's subscription as cancelled
+  console.log(`Subscription deleted for customer ${customerId}`);
+  // Update the user's document to mark the subscription as cancelled
+  await setDoc(doc(db, 'users', customerId), { // Assuming customerId is the user's doc ID
+    stripeSubscriptionStatus: 'cancelled',
+  }, { merge: true });
 }

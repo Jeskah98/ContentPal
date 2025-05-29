@@ -1,13 +1,99 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation';
+import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
+import { useAuth } from '@/hooks/useAuth' // Import the useAuth hook
 import Navbar from '@/components/FloatingNav'
 
 export default function SignUp() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState(''); // Add state for name
+  const [error, setError] = useState<string | null>(null);
+  const { signup, loading, user } = useAuth(); // Get signup, loading, and user from the hook
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null); // Clear previous errors
+
+    console.log('Attempting to sign up...');
+    console.log('Auth loading state:', loading);
+    console.log('Auth user state:', user);
+
+    if (loading) {
+      console.log('Authentication is still loading. Aborting signup attempt.');
+      return; // Prevent signup if authentication is still loading
+    }
+
+    try {
+      await signup(email, password);
+    } catch (err: any) {
+      console.error('Signup failed:', err.message);
+      setError(err.message); // Display error message to the user
+    }
+  };
+
+  // Use useEffect to handle redirection after user state is updated
+  useEffect(() => {
+    // Only run this effect if the user is authenticated AND not currently in a loading state
+    // This indicates the authentication process has completed and a user object is available.
+    if (user && !loading) {
+      console.log('User state updated. Attempting to create Firestore document and Stripe customer.');
+      const createUserDataAndCustomer = async () => {
+        try {
+          // Get Firestore instance (assuming it's initialized elsewhere and accessible)
+          const db = getFirestore();
+          const userRef = doc(db, 'users', user.uid);
+
+          // Create Firestore user document
+          await setDoc(userRef, {
+            uid: user.uid,
+            email: user.email,
+            name: name, // Include the user's name
+            // Add any other initial user data here
+          }, { merge: true }); // Use merge: true in case a document exists
+          console.log('Firestore user document created/updated successfully for UID:', user.uid);
+
+          // Now create Stripe customer via API route
+          const response = await fetch('/api/create-stripe-customer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uid: user.uid, email: user.email, name: name }),
+          });
+
+          const data = await response.json();
+          console.log('Stripe customer creation response:', data);
+
+          // Redirect to dashboard after successful user data setup and Stripe customer creation
+          router.push('/dashboard');
+
+        } catch (err: any) {
+          console.error('Error in post-signup setup (Firestore/Stripe):', err.message);
+          setError('Account created, but failed to set up user data or billing. Please contact support.');
+        }
+      };
+      createUserDataAndCustomer();
+    }
+  }, [user, loading, router, name]); // Dependencies: user, loading state, router for push, and name state for initial data
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center">
+        <p className="text-white text-xl">Loading authentication service...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <Navbar />
-      
+
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16">
@@ -20,13 +106,28 @@ export default function SignUp() {
               <h1 className="text-4xl font-bold text-white mb-8">
                 Start Your Free Trial
               </h1>
-              
-              <form className="space-y-6">
+
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label className="block text-gray-300 mb-2">Full Name</label> {/* Add label for name */}
+                  <input
+                    type="text" // Input type for name
+                    className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={name} // Bind value to name state
+                    onChange={(e) => setName(e.target.value)} // Update name state on change
+                    required
+                  />
+                </div>
+
+                {/* Removed duplicate form tag - assuming this was a copy-paste error */}
                 <div>
                   <label className="block text-gray-300 mb-2">Email</label>
                   <input
                     type="email"
                     className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -35,10 +136,17 @@ export default function SignUp() {
                   <input
                     type="password"
                     className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
 
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors">
+                {error && (
+                  <p className="text-red-500 text-sm">{error}</p>
+                )}
+
+                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors">
                   Create Account
                 </button>
 
@@ -49,13 +157,13 @@ export default function SignUp() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <button className="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-colors">
+                  <button type="button" className="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-colors">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       {/* Google SVG icon */}
                     </svg>
                     Google
                   </button>
-                  <button className="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-colors">
+                  <button type="button" className="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white py-3 px-6 rounded-lg transition-colors">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       {/* GitHub SVG icon */}
                     </svg>
@@ -91,7 +199,7 @@ export default function SignUp() {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-900/30 backdrop-blur-sm rounded-2xl p-8 border border-gray-800">
                 <div className="text-gray-400 space-y-4">
                   <blockquote className="italic">
@@ -111,5 +219,5 @@ export default function SignUp() {
         </div>
       </section>
     </div>
-  )
+  );
 }

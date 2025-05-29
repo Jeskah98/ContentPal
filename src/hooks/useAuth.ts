@@ -1,32 +1,14 @@
-import { useEffect } from 'react'
-import { auth } from '@/lib/firebase'
-import { User, onAuthStateChanged } from 'firebase/auth'
-import { create } from 'zustand'
+import { useContext } from 'react'
+import { AuthContext } from '@/context/AuthContext'
 
-interface AuthState {
-  user: User | null
-  loading: boolean
-  setUser: (user: User | null) => void
-  setLoading: (loading: boolean) => void
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  loading: true,
-  setUser: (user) => set({ user }),
-  setLoading: (loading) => set({ loading })
-}))
-
+/**
+ * Custom hook to access the authentication context.
+ * Provides easy access to the current user and authentication-related functions.
+ */
 export const useAuth = () => {
-  const { user, loading, setUser, setLoading } = useAuthStore()
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setLoading(false)
-    })
-    return () => unsubscribe()
-  }, [setUser, setLoading])
-
-  return { user, loading }
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context;
 }

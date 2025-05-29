@@ -53,18 +53,18 @@ export default function DynamicPricing() {
             Simple, Transparent Pricing
           </h2>
           <div className="flex justify-center items-center gap-4 mb-8">
-            <span className="text-gray-600">Annual</span>
+            <span className="text-gray-600">Monthly</span>
             <button 
               onClick={() => setAnnualBilling(!annualBilling)}
-              className={`relative w-12 h-6 rounded-full p-1 transition-colors ${
+              className={`relative w-12 h-8 rounded-full p-1 transition-colors ${
                 annualBilling ? 'bg-blue-500' : 'bg-gray-300'
               }`}
             >
-              <div className={`absolute w-4 h-4 rounded-full bg-white transform transition-transform ${
+              <div className={`absolute w-3 h-3 rounded-full bg-white transform transition-transform ${
                 annualBilling ? 'translate-x-6' : 'translate-x-0'
               }`} />
             </button>
-            <span className="text-gray-600">Monthly</span>
+            <span className="text-gray-600">Annual</span>
           </div>
         </div>
 

@@ -1,9 +1,20 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Navbar from '@/components/FloatingNav'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { login, user } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user) router.push('/dashboard')
+  }, [user, router])
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <Navbar />
@@ -20,18 +31,24 @@ export default function Login() {
                 Welcome Back
               </h1>
               
-              <form className="space-y-6">
+              <form
+                className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  login(email, password)
+                }}
+              >
                 <div>
                   <label className="block text-gray-300 mb-2">Email</label>
                   <input
                     type="email"
                     className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-
                 <div>
                   <label className="block text-gray-300 mb-2">Password</label>
-                  <input
+                  <input 
                     type="password"
                     className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
