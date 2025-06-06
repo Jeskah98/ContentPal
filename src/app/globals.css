@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 255 255 255;
+  --foreground: 24 24 27;
+}
+
+/* globals.css */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-background text-foreground;
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom utility classes */
+.text-container-responsive {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+.testimonial-card {
+  @apply relative bg-white p-8 rounded-2xl shadow-loom-md;
+}
+
+.testimonial-quote {
+  @apply absolute top-8 left-8 w-12 h-12 text-blue-600/20;
+}
+/* UploadThing styles */
+[data-ut-element="button"] {
+  background-color: #7e22ce !important;
+  color: white !important;
+}
+
+[data-ut-element="button"][data-state="readying"] {
+  background-color: rgba(126, 34, 206, 0.5) !important;
+}
+
+[data-ut-element="button"][data-state="uploading"]::after {
+  background-color: #a855f7 !important;
+}
+
+.ut-label {
+  color: #d8b4fe !important;
+}
+
+.ut-allowed-content {
+  color: #9ca3af !important;
+}
+
+@layer utilities {
+  .gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .backdrop-glow {
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+  }
+}
