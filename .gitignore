@@ -43,3 +43,5 @@ next-env.d.ts
 
 
 config/serviceAccountKey.json
+.env.local
+config/serviceAccountKey.json
