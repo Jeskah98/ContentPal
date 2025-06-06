@@ -51,6 +51,7 @@ export default function Login() {
                   <input 
                     type="password"
                     className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 

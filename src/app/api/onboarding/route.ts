@@ -1,19 +1,41 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+
+const serviceAccount = require('../../../../config/serviceAccountKey.json'); // Use require to load the service account key
+
+if (!getApps().length) {
+  initializeApp({
+    credential: cert(serviceAccount),
+    databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`
+  });
+}
+
+const adminDb = getFirestore();
 
 export async function POST(request: Request) {
-  console.log('API route reached');
   try {
-    const data = await request.json();
-    console.log('Received onboarding data:', data);
+    const onboardingData = await request.json();
+    const userId = onboardingData.userId;
 
-    // Save data to Firestore
-    await addDoc(collection(db, 'onboarding_submissions'), data);
+    if (!userId) {
+      return NextResponse.json({ message: 'Missing userId' }, { status: 400 });
+    }
 
-    return NextResponse.json({ message: 'Data saved successfully!' }, { status: 200 });
+    // Add document ID explicitly
+    const submissionRef = adminDb.collection('onboardingSubmissions').doc(userId);
+    
+    // Only store necessary data (exclude userId since it's the doc ID)
+    const { userId: _, ...submissionData } = onboardingData;
+    
+    await submissionRef.set({
+      ...submissionData,
+      createdAt: new Date()  // Add timestamp for tracking
+    }, { merge: true });
+
+    return NextResponse.json({ message: 'Onboarding data submitted successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error processing onboarding data:', error);
-    return NextResponse.json({ message: 'Error processing data' }, { status: 500 });
+    console.error('Error submitting onboarding data:', error);
+    return NextResponse.json({ message: 'Error submitting onboarding data', error: (error as Error).message }, { status: 500 });
   }
 }

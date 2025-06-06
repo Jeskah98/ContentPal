@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext'; // Import useAuth
 import { useRouter } from 'next/navigation';
 
 export default function OnboardingFormPage() {
@@ -26,6 +27,9 @@ export default function OnboardingFormPage() {
     competitors: '',
     notes: '',
   });
+  const { user, loading: authLoading } = useAuth(); // Get the authenticated user and auth loading state
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to manage submission loading
+  const [error, setError] = useState<string | null>(null); // Add error state
 
   const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -56,13 +60,22 @@ export default function OnboardingFormPage() {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (isSubmitting) return; // Prevent double submission
+    setError(null); // Clear previous errors on new submission attempt
+    if (authLoading) return; // Wait for auth to load
+    if (!user || !user.uid) {
+      console.error('User not authenticated.');
+      // Optionally redirect to login or show an error message
+      return;
+    }
     e.preventDefault();
 
     // Basic validation
-    const requiredFields = ['companyName', 'contactPerson', 'email', 'industry', 'brandDescription', 'brandValues', 'targetAudience'];
+    const requiredFields = ['companyName', 'contactPerson', 'email', 'industry', 'brandDescription', 'brandValues', 'targetAudience'] as const;
     let allFieldsFilled = true;
     requiredFields.forEach(field => {
-        if (!formData[field as keyof typeof formData].trim()) {
+        const value = formData[field];
+        if (typeof value === 'string' && !value.trim()) {
             allFieldsFilled = false;
             // You might want to add visual feedback for empty fields here
         }
@@ -74,14 +87,20 @@ export default function OnboardingFormPage() {
     }
 
     if (allFieldsFilled) {
+      setIsSubmitting(true); // Set submitting state to true
+      const dataToSend = {
+        ...formData,
+        userId: user.uid,  // Ensure this is at root level
+        id: user.uid       // Add this to match Firestore document ID
+      };
       // Send data to API route
       fetch('/api/onboarding', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-      })
+        body: JSON.stringify(dataToSend),
+      }) // Change formData to dataToSend
       .then(async (response) => {
         if (!response.ok) {
           // If the response is not OK, throw an error or log the response text
@@ -96,9 +115,14 @@ export default function OnboardingFormPage() {
         alert('Submission successful!'); // Simple alert for confirmation
         router.push('/dashboard'); // Redirect to dashboard
       })
-      .catch((error) => console.error('Error submitting form:', error));
+      .catch((error) => {
+        console.error('Error submitting form:', error); // Keep console error for debugging
+        setError(`Error submitting form: ${error.message || 'Unknown error'}`); // Set user-friendly error message
+      })
+      .finally(() => setIsSubmitting(false)); // Reset submitting state
     } else {
         console.error('Please fill in all required fields and select at least one social media goal.');
+        setError('Please fill in all required fields and select at least one social media goal.'); // Set error for validation
         // Add user-friendly error message display
     }
   };
@@ -241,8 +265,15 @@ export default function OnboardingFormPage() {
             </div>
           </div>
 
+          {/* Display error message */}
+          {error && (
+            <div className="text-red-500 text-center mt-4">
+              {error}
+            </div>
+          )}
+
           <div className="flex justify-center mt-8">
-            <button type="submit" className="submit-button bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-semibold">
+            <button type="submit" className="submit-button bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-semibold" disabled={isSubmitting || authLoading}>
               Submit Information
             </button>
           </div>
