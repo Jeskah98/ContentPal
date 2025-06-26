@@ -3,15 +3,34 @@ import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const serviceAccount = require('../../../../../config/serviceAccountKey.json'); // Use require to load the service account key
+// Validate required environment variables
+if (!process.env.FIREBASE_PROJECT_ID || 
+  !process.env.FIREBASE_CLIENT_EMAIL || 
+  !process.env.FIREBASE_PRIVATE_KEY) {
+throw new Error('Missing Firebase environment variables');
+}
 
+// Fix the private key formatting
+const privateKey = process.env.FIREBASE_PRIVATE_KEY
+  .replace(/\\n/g, '\n')  // Replace escaped newlines
+  .replace(/"/g, '');     // Remove any quotes
+
+const firebaseAdminConfig = {
+  credential: cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: privateKey
+  }),
+  databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`
+};
+
+// Initialize only if not already initialized
 if (!getApps().length) {
-  initializeApp({
-    credential: cert(serviceAccount),
-    databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`
-  })
-} 
+  initializeApp(firebaseAdminConfig);
+}
+
 const adminDb = getFirestore();
+
 
 export async function POST(req: NextRequest) {
   try {

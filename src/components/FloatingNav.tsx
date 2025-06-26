@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext'
 
 const mainNavItems = [
   { name: 'Home', href: '/' },
-  { name: 'Features', href: '#features' },
+  { name: 'Case Study', href: '/casestudy' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Legal', href: '/legal' },
   { name: 'Contact', href: '/contact' }

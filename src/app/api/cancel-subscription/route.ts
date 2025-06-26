@@ -2,9 +2,38 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe'; // Assuming stripe instance is exported from here
 import { db } from '@/lib/firebase'; // Import Firestore db
 import { doc, getDoc } from 'firebase/firestore'; // Import necessary Firestore functions
+import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
-// Placeholder function to get the user's Stripe subscription ID from your database
-// REPLACE THIS WITH YOUR ACTUAL DATABASE LOGIC
+// Validate required environment variables
+if (!process.env.FIREBASE_PROJECT_ID || 
+  !process.env.FIREBASE_CLIENT_EMAIL || 
+  !process.env.FIREBASE_PRIVATE_KEY) {
+throw new Error('Missing Firebase environment variables');
+}
+
+// Fix the private key formatting
+const privateKey = process.env.FIREBASE_PRIVATE_KEY
+  .replace(/\\n/g, '\n')  // Replace escaped newlines
+  .replace(/"/g, '');     // Remove any quotes
+
+const firebaseAdminConfig = {
+  credential: cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: privateKey
+  }),
+  databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`
+};
+
+// Initialize only if not already initialized
+if (!getApps().length) {
+  initializeApp(firebaseAdminConfig);
+}
+
+const adminDb = getFirestore();
+
 async function getUserSubscriptionId(userId: string): Promise<string | null> {
   const userDoc = await getDoc(doc(db, 'users', userId));
   return userDoc.exists() ? (userDoc.data()?.subscriptionId as string || null) : null;
