@@ -2,8 +2,10 @@
 'use client'
 import { motion } from 'framer-motion'
 import { PlayCircle } from 'lucide-react'
+import Link from 'next/link';
 
 export default function HeroSection() {
+
   return (
     <section className="relative bg-gradient-to-b from-gray-900 to-gray-800 py-32 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -27,9 +29,9 @@ export default function HeroSection() {
             transition={{ delay: 0.5 }}
             className="flex flex-col sm:flex-row justify-center gap-6"
           >
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105">
-              Start Free Trial
-            </button>
+            <Link href="/subscribe"               className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105">
+                Start Free Trial
+            </Link>
             <button className="flex items-center justify-center text-white hover:text-blue-300 gap-2 group">
               <PlayCircle className="w-8 h-8 transition-transform group-hover:scale-110" />
               <span className="text-lg">Watch Demo</span>
@@ -50,7 +52,7 @@ export default function HeroSection() {
                 playsInline
                 className="w-full h-full object-cover"
               >
-                <source src="/videos/dashboard-preview.mp4" type="video/mp4" />
+                <source src="/videos/charle.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               {/* Gradient overlay */}

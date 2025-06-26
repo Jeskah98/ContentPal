@@ -23,9 +23,10 @@ export default function MissionStatement() {
             </div>
             
             <p className="mt-16 text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              At ContentPal.AI, we're pioneering a new era of brand storytelling. Our NeuralCore™ 
-              technology combines cutting-edge AI with human-inspired creativity to deliver content 
-              that resonates, engages, and converts.
+              At ContentPal, we're pioneering a new era of brand storytelling.  We offer a comprehensive suite of 
+              AI-powered tools combined with human-inspired creativity to deliver content 
+              that resonates, engages, and converts. Revolutionize your social media strategy, automate your tedious 
+              tasks and boost your online presence.
             </p>
           </div>
         </div>

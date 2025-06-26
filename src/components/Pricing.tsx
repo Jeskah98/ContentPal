@@ -12,36 +12,45 @@ export default function DynamicPricing() {
       price: annualBilling ? '$2,950' : '$295',
       description: 'Perfect for individual creators',
       features: [
-        '20 AI-generated posts/month',
-        'Basic analytics',
-        '3 social platforms',
-        'Email support'
-      ]
+        'Single platform social media management with analytics',
+        '8 image posts interchangeable for platforms',
+        'Monthly newsletter creation *',
+        'AI image re-imagining *',
+        'Email support',
+      ],
     },
     {
       name: 'Professional',
       price: annualBilling ? '$5,950' : '$595',
       description: 'For growing brands & agencies',
       features: [
-        '50 AI-generated posts/month',
-        'Advanced analytics',
-        '5 social platforms',
+        'Dual platform social media management with analytics',
+        'Brand/Business social media marketing strategy',
+        '16 image posts interchangeable for platforms',
+        'Biweekly newsletter creation *',
+        'AI image re-imagining',
+        'AI video editing *',
         'Priority support',
-        'Competitor analysis'
+        'Competitor analysis',
       ],
       featured: true
     },
     {
       name: 'Enterprise',
-      price: '$1095',
+      price: annualBilling ? '$10,950' : '$1950',
       description: 'For large organizations',
       features: [
-        'Unlimited posts',
-        'Dedicated account manager',
-        'Custom AI training',
-        'API access',
-        'SLA & 24/7 support'
-      ]
+        '32 image posts interchangeable for platforms',
+        '12 image & text LinkedIn posts',
+        'Weekly newsletter creation',
+        'AI image re-imagining',
+        'AI video editing',
+        'Custom short video creation with AI',
+        'Custom image creation with AI',
+        'Voice overs with custom voices or voice cloning',
+        'Full social media management with analytics',
+        'Dedicated account manager & 24/7 support',
+      ],
     }
   ]
 

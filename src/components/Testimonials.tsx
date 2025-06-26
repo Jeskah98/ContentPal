@@ -7,21 +7,21 @@ import Image from 'next/image'
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Kensington',
-    role: 'CMO, Luxe Brands',
-    content: 'ContentPal.AI has transformed our social presence. The AI understands our luxury aesthetic better than most human creatives.',
+    name: 'Sarah Kann',
+    role: 'CMO, Lumo Brands',
+    content: 'ContentPal has transformed our social presence. The AI understands our luxury aesthetic better than most human creatives.',
     avatar: '/avatars/bgdlogo.png'
   },
   {
     id: 2,
-    name: 'James Vanderbilt',
-    role: 'Digital Director, Premier Estates',
+    name: 'James Vanders',
+    role: 'Digital Director, Pulmon Estates',
     content: 'The autonomous workflow saves us 40+ hours per week while actually improving our engagement metrics.',
     avatar: '/avatars/logo.png'
   },
   {
     id: 3,
-    name: 'Olivia Laurent',
+    name: 'Olivia Levar',
     role: 'Founder, Haute Social',
     content: 'Finally an AI solution that doesn\'t feel robotic. The content is consistently on-brand and editorial-grade.',
     avatar: '/avatars/elogo.png'
