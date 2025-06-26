@@ -418,7 +418,7 @@ const handleGrantDashboardAccess = async (uid: string) => {
         setFeedbackType('success');
         
         // Clear state after success
-        setSelectedFiles([]);
+        setSelectedFiles(null);
         
         // Close modal after 2 seconds to let user see success message
         setTimeout(() => {
