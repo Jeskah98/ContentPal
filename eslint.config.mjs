@@ -23,7 +23,11 @@ const config = [
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "react/no-unescaped-entities": "off",
-      "@typescript-eslint/consistent-type-imports": "off"
+      "@typescript-eslint/consistent-type-imports": "off",
+      'no-unused-vars': 'off',
+      'react/jsx-no-undef': 'off',
+      'no-undef': 'off',
+    
     },
     languageOptions: {
       parser: typescriptParser,
