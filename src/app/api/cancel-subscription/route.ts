@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe'; // Assuming stripe instance is exported from here
 import { db } from '@/lib/firebase'; // Import Firestore db
 import { doc, getDoc } from 'firebase/firestore'; // Import necessary Firestore functions
-import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { collection, getDocs } from 'firebase/firestore';
 
 // Validate required environment variables
 if (!process.env.FIREBASE_PROJECT_ID || 

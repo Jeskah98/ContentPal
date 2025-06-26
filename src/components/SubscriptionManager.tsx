@@ -84,13 +84,10 @@ const CheckoutForm = ({ priceId }: { priceId: string }) => {
 export default function SubscriptionManager({ priceId }: { priceId: string }) {
   const { user, loading: authLoading } = useAuth();
   const [subscription, setSubscription] = useState<{ status: string } | null>(null);
-  const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
-  const [cancelError, setCancelError] = useState<string | null>(null);
   const [isCanceling, setIsCanceling] = useState(false);
 
   useEffect(() => {
     const fetchSubscription = async () => {
-      setIsLoadingSubscription(true);
       if (user) {
         try {
           const res = await fetch(`/api/get-subscription?userId=${user.uid}`);
@@ -105,11 +102,8 @@ export default function SubscriptionManager({ priceId }: { priceId: string }) {
         } catch (error) {
           console.error('Error fetching subscription:', error);
           setSubscription(null); // Treat as no subscription found on error
-        } finally {
-          setIsLoadingSubscription(false);
-        }
+        } 
       } else {
-        setIsLoadingSubscription(false);
         setSubscription(null); // No user means no subscription to fetch
       }
     };
@@ -122,7 +116,6 @@ export default function SubscriptionManager({ priceId }: { priceId: string }) {
     // Reset subscription state when auth loading or user changes to null
     if (authLoading || !user) {
       setSubscription(null);
-      setIsLoadingSubscription(authLoading); // Indicate loading while auth is loading
     }
 
   }, [user, authLoading]); // Depend on user and authLoading
@@ -134,7 +127,6 @@ export default function SubscriptionManager({ priceId }: { priceId: string }) {
     }
 
     setIsCanceling(true);
-    setCancelError(null); // Clear previous errors
     try {
       const response = await fetch('/api/cancel-subscription', {
         method: 'POST',

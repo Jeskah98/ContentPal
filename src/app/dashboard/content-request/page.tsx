@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/FloatingNav';
+import { Database } from 'lucide-react';
 
 export default function ContentRequestPage() {
   const { user } = useAuth(); // Moved to top level
@@ -79,6 +80,7 @@ export default function ContentRequestPage() {
       setTargetAudience('');
       setKeyMessage('');
       setSpecificRequirements('');
+      console.log(data)
       
     } catch (error) {
       console.error('Error submitting content request:', error);

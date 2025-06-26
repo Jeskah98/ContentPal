@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, getApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; // Assuming your Firebase client initialization is here
 
 // Validate required environment variables
 if (!process.env.FIREBASE_PROJECT_ID || 

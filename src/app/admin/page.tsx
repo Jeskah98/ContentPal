@@ -41,8 +41,6 @@ const AdminDashboardPage = () => {
   const [selectedContentRequest, setSelectedContentRequest] = useState<any>(null); // State for selected content request
   const [updatingContentRequestStatus, setUpdatingContentRequestStatus] = useState<string | null>(null); // State for tracking content request status update loading
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null); // State for selected files
-  const [uploadingContent, setUploadingContent] = useState(false); // State to track the uploading of generated content
-  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
 
@@ -363,85 +361,6 @@ const handleGrantDashboardAccess = async (uid: string) => {
     }
 };
   
-    // Function to handle uploading generated content
-    const handleUploadContent = async () => {
-      // Validate required state with proper user feedback
-      if (!user) {
-        setFeedbackMessage("Admin user not logged in");
-        setFeedbackType("error");
-        return;
-      }
-    
-      if (!selectedContentRequest) {
-        setFeedbackMessage("No content request selected");
-        setFeedbackType("error");
-        return;
-      }
-    
-      if (!selectedFiles || selectedFiles.length === 0) {
-        setFeedbackMessage("Please select at least one file to upload");
-        setFeedbackType("error");
-        return;
-      }
-    
-      setUploadingContent(true);
-      setFeedbackMessage(null);
-      setFeedbackType(null);
-    
-      try {
-        const formData = new FormData();
-        formData.append('requestId', selectedContentRequest.id);
-        
-        // Convert FileList to array and append files
-        const filesArray = Array.from(selectedFiles);
-        filesArray.forEach(file => {
-          formData.append('files', file);
-        });
-    
-        const idToken = await user.getIdToken();
-        const response = await fetch('/api/admin/upload-generated-content', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${idToken}`
-          },
-          body: formData,
-        });
-    
-        const responseData = await response.json();
-    
-        if (!response.ok) {
-          throw new Error(responseData.error || `Upload failed with status: ${response.status}`);
-        }
-    
-        // Success handling
-        setFeedbackMessage(responseData.message || 'Content uploaded successfully!');
-        setFeedbackType('success');
-        
-        // Clear state after success
-        setSelectedFiles(null);
-        
-        // Close modal after 2 seconds to let user see success message
-        setTimeout(() => {
-          setShowContentRequestModal(false);
-        }, 2000);
-        
-        // Optional: Refetch content requests to update UI
-        // fetchContentRequests(); 
-    
-      } catch (error: any) {
-        console.error('Upload failed:', error);
-        setFeedbackMessage(error.message || 'Failed to upload content');
-        setFeedbackType('error');
-      } finally {
-        setUploadingContent(false);
-        
-        // Clear feedback after 5 seconds
-        setTimeout(() => {
-          setFeedbackMessage(null);
-          setFeedbackType(null);
-        }, 5000);
-      }
-    };
   
   
   const handleUpdateContentRequestStatus = async (requestId: string, newStatus: string) => {
@@ -477,7 +396,6 @@ const handleGrantDashboardAccess = async (uid: string) => {
       console.error('Error updating content request status:', error);
       setUpdatingContentRequestStatus(null);
     } finally {
-      setUploadingContent(false);
       // Optional: Show feedback message after upload
       setFeedbackType('success');
       // Close the modal after successful upload

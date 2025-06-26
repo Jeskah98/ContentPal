@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext'; // Import useAuth
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 export default function OnboardingFormPage() {
   const [formData, setFormData] = useState({
@@ -114,6 +115,7 @@ export default function OnboardingFormPage() {
       .then((data) => {
         alert('Submission successful!'); // Simple alert for confirmation
         router.push('/dashboard'); // Redirect to dashboard
+        console.log(data)
       })
       .catch((error) => {
         console.error('Error submitting form:', error); // Keep console error for debugging

@@ -1,6 +1,6 @@
 'use client'
 import { useState, ChangeEvent } from 'react'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { storage } from '@/lib/firebase'
 
 export default function FileUploader() {
