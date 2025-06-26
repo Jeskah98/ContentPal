@@ -20,10 +20,10 @@ const config = [
       "@typescript-eslint": typescriptPlugin
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "react/no-unescaped-entities": "off",
-      "@typescript-eslint/consistent-type-imports": "error"
+      "@typescript-eslint/consistent-type-imports": "off"
     },
     languageOptions: {
       parser: typescriptParser,

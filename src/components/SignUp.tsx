@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
 import { useAuth } from '@/hooks/useAuth' // Import the useAuth hook
 import Navbar from '@/components/FloatingNav'
+import React from 'react'
 
 export default function SignUp() {
   const [email, setEmail] = useState('');

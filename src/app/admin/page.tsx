@@ -479,12 +479,9 @@ const handleGrantDashboardAccess = async (uid: string) => {
     } finally {
       setUploadingContent(false);
       // Optional: Show feedback message after upload
-      setFeedbackMessage(result.message || 'Content uploaded successfully!');
       setFeedbackType('success');
       // Close the modal after successful upload
       setShowContentRequestModal(false);
-      // Clear the input field
-      setGeneratedContentInput('');
 
     }
   };
@@ -950,7 +947,6 @@ const handleGrantDashboardAccess = async (uid: string) => {
                 
                 // Trigger a refresh instead of calling directly
                 setRefreshTrigger(prev => prev + 1);
-                fetchContentRequests(); // Refresh to show new files
               }}
               onUploadError={(error) => {
                 setFeedbackMessage(`Upload failed: ${error.message}`);

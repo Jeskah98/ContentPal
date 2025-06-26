@@ -1,6 +1,7 @@
 // components/AuraHotelCaseStudy.jsx
 
 import React from 'react';
+import Image from 'next/image';
 // Lucide React is assumed to be available for icons, but not strictly necessary for this content-heavy page.
 // If you want to use icons, you might import them like:
 // import { Star, Compass, Users, Lightbulb } from 'lucide-react';
@@ -578,14 +579,10 @@ const AuraHotelCaseStudy = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {aiImages.map((image, index) => (
               <div key={index} className="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-md">
-                <img
+                <Image
                   src={`/${image.src}`} // Assuming images are in the public directory of your Next.js project
                   alt={image.alt}
                   className="w-full h-auto rounded-lg object-cover mb-4 shadow-sm"
-                  onError={(e) => {
-                    e.target.onerror = null; // Prevents infinite loop
-                    e.target.src = `https://placehold.co/600x400/cccccc/333333?text=Image+Not+Found`; // Fallback image
-                  }}
                 />
                 <p className="text-center text-sm text-gray-600 italic">
                   Example: "{image.alt}" (This image could be enhanced through AI photo editing, e.g., for optimal lighting or mood.)
@@ -639,7 +636,7 @@ const AuraHotelCaseStudy = () => {
       </main>
 
       <footer className="max-w-4xl mx-auto py-8 text-center text-gray-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} Your Business Name. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} ContentPal. All rights reserved.</p>
       </footer>
     </div>
   );

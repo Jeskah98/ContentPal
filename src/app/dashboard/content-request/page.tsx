@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/FloatingNav';
 
