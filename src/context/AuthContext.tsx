@@ -1,9 +1,26 @@
 "use client";
 
-import { useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+  signup: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshToken: () => Promise<void>; // Added refreshToken to the type
+}
+
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  signup: async (email, password) => {},
+  login: async (email, password) => {},
+  logout: async () => {},
+  refreshToken: async () => {}, // Added refreshToken to the default context value
+});
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -50,4 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextType => {
+  return useContext(AuthContext);
+};
