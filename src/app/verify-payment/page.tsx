@@ -33,7 +33,7 @@ const VerifyPaymentPage: React.FC = () => {
       </header>
       <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full text-center bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Thank You For Your Payment!</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Thank You For Subscribing!</h2>
           <p className="text-gray-700">
             Your payment has been received and is currently being verified. We will notify you once your subscription is active.
           </p>

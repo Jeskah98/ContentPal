@@ -8,15 +8,6 @@ import { useRouter } from 'next/navigation';
 export default function SubscribePage() {
   const subscriptionTiers = [
     {
-      name: 'Free',
-      price: '$0',
-      description: 'Free Trial',
-      features: [
-        ''
-      ],
-      highlight: false,
-    },
-    {
       name: 'Starter',
       price: '$297',
       description: 'Perfect for individual creators',
@@ -70,10 +61,9 @@ export default function SubscribePage() {
 
   // Map tier names directly to Payment Link URLs
   const paymentLinks: { [key: string]: string | null } = {
-    Free: 'https://buy.stripe.com/test_5kQaEZ8T34d0dtpexrdZ602',
-    Starter: 'https://buy.stripe.com/test_00w5kF8T3dNA0GD74ZdZ601',
-    Professional: 'https://buy.stripe.com/test_00w5kF8T3dNA0GD74ZdZ601',
-    Enterprise: 'https://buy.stripe.com/test_cNiaEZ1qBdNAfBxgFzdZ603',
+    Starter: 'https://buy.stripe.com/8x200i5Tk5PG80w6s4gEg00',
+    Professional: 'https://buy.stripe.com/00w8wO4Pg5PGcgMbMogEg01',
+    Enterprise: 'https://buy.stripe.com/00w6oG81sfqggx2eYAgEg03',
   };
 
   const handleCheckout = (tierName: string) => {
