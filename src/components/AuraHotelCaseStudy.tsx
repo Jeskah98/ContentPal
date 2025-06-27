@@ -1,6 +1,7 @@
 // components/AuraHotelCaseStudy.jsx
 
 import React from 'react';
+import { ReactNode } from "react";
 import Image from 'next/image';
 // Lucide React is assumed to be available for icons, but not strictly necessary for this content-heavy page.
 // If you want to use icons, you might import them like:
@@ -242,7 +243,13 @@ const AuraHotelCaseStudy = () => {
     // { src: 'hotel_exterior_modern.png', alt: 'Modern luxury hotel exterior with infinity pool overlooking mountains.' },
   ];
 
-  const TableComponent = ({ title, headers, data }) => (
+  type TableComponentProps = {
+    title: string;
+    headers: string[];
+    data: Array<Record<string, ReactNode>>;
+  };
+
+  const TableComponent = ({ title, headers, data }: TableComponentProps) => (
     <div className="mb-8 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
       <h3 className="text-2xl font-bold text-gray-800 mb-4">{title}</h3>
       <div className="overflow-x-auto">
@@ -608,7 +615,6 @@ const AuraHotelCaseStudy = () => {
               height="315"
               src="videos/aura.mp4" // Placeholder video (Rick Astley) - replace with actual content
               title="Placeholder AI Generated Video"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="rounded-lg shadow-xl aspect-video w-full max-w-2xl"
