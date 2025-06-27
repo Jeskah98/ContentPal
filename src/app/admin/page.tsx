@@ -536,7 +536,7 @@ const handleGrantDashboardAccess = async (uid: string) => {
                                   <button
                                     onClick={() => handleRevokeAdmin(userData.uid)}
                                     className="text-red-400 hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={revokingAdmin === userData.uid || isCurrentUser}
+                                    disabled={Boolean(revokingAdmin === userData.uid || isCurrentUser)}
                                   >
                                     {revokingAdmin === userData.uid 
                                       ? 'Revoking...' 
