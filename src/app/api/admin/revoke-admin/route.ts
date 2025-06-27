@@ -29,8 +29,6 @@ if (!getApps().length) {
   initializeApp(firebaseAdminConfig);
 }
 
-const adminDb = getFirestore();
-
 
 export async function POST(req: NextRequest) {
   try {

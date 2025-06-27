@@ -2,6 +2,7 @@
 import { useAuth } from '@/context/AuthContext'
 import Navbar from '@/components/FloatingNav'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import AnalyticsOverview from '@/components/AnalyticsOverview';
 import { useState, useEffect, useCallback } from 'react'
@@ -41,8 +42,6 @@ export default function Dashboard() {
   const [userContentRequests, setUserContentRequests] = useState<ContentRequest[]>([]);
   const [fetchingUserContentRequests, setFetchingUserContentRequests] = useState(true);
   const [updatingApprovalStatus, setUpdatingApprovalStatus] = useState<string | null>(null);
-  const [generatedContentInput, setGeneratedContentInput] = useState(''); // State for the generated content textarea
-  const [uploadingContent, setUploadingContent] = useState(false); // State for tracking content upload loading
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -284,7 +283,7 @@ export default function Dashboard() {
                                   </a>
                                   {url.match(/\.(jpeg|jpg|gif|png)$/) && (
                                     <div className="mt-2">
-                                      <img 
+                                      <Image 
                                         src={url} 
                                         alt={`Uploaded content ${idx + 1}`}
                                         className="max-w-full h-auto rounded-md"

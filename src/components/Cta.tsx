@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 export default function FinalCTA() {
   return (
@@ -16,7 +15,7 @@ export default function FinalCTA() {
           <div className="mt-10 flex flex-col @sm:flex-row justify-center gap-4">
             <Link
               href="/signup"
-              className={cn(
+              className={(
                 buttonVariants({ size: 'default', variant: 'default' }),
                 'bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700'
               )}
@@ -25,7 +24,7 @@ export default function FinalCTA() {
             </Link>
             <Link
               href="/demo"
-              className={cn(
+              className={(
                 buttonVariants({ size: 'default', variant: 'outline' }),
                 'border-white text-white hover:bg-white/10'
               )}

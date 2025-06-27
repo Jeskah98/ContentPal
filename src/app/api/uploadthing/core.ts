@@ -33,8 +33,6 @@ if (!getApps().length) {
   initializeApp(firebaseAdminConfig);
 }
 
-const adminDb = getFirestore();
-
 const db = getFirestore();
 
 export const ourFileRouter = {

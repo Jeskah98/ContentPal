@@ -2,13 +2,8 @@
 import Navbar from '@/components/FloatingNav';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-const stripe = typeof window !== 'undefined' && stripePublishableKey
-  ? (window as any).Stripe(stripePublishableKey)
-  : null;
 
 export default function SubscribePage() {
   const subscriptionTiers = [

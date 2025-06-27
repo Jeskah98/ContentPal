@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app'; // Import FirebaseApp type
 import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, Auth } from 'firebase/auth'; // Import Auth type
 import { getFirestore, doc, setDoc, Firestore } from 'firebase/firestore'; // Import Firestore type
-import { getStorage, FirebaseStorage } from 'firebase/storage'; // Import FirebaseStorage type
+import { getStorage, ref, uploadBytes, getDownloadURL , FirebaseStorage } from 'firebase/storage'; // Import FirebaseStorage type
 import { getAnalytics, Analytics } from 'firebase/analytics'; // Import Analytics type
 
 const firebaseConfig = {
@@ -53,10 +53,10 @@ export const createUserProfile = async (userId: string, data: { email: string })
 }
 
 // Storage Methods
-export const uploadFile = async (file: File, path: string) => {
-  const storageRef = storage.ref(path)
-  const snapshot = await storageRef.put(file)
-  const downloadURL = await snapshot.ref.getDownloadURL()
+export const uploadFile = async (file: File, path: string): Promise<string> => {
+  const storageRef = ref( storage, path)
+  const snapshot = await uploadBytes(storageRef, file)
+  const downloadURL = await getDownloadURL(snapshot.ref)
   return downloadURL
 }
 

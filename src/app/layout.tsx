@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from '@/components/FloatingNav'
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { AuthProvider } from "@/context/AuthContext";
+import React from "react";
+import Script from 'next/script';
+
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -23,9 +28,14 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body className={`${inter.variable} antialiased`}>
-            <script src="https://js.stripe.com/v3/"></script>
+            <Script 
+            src="https://js.stripe.com/v3/" 
+            strategy="afterInteractive"
+          />
           <Navbar />
           {children}
+          <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </AuthProvider>

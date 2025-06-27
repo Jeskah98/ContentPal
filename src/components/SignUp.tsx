@@ -3,10 +3,11 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
 import { useAuth } from '@/hooks/useAuth' // Import the useAuth hook
 import Navbar from '@/components/FloatingNav'
+import React from 'react'
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -15,7 +16,6 @@ export default function SignUp() {
   const [error, setError] = useState<string | null>(null);
   const { signup, loading, user } = useAuth(); // Get signup, loading, and user from the hook
   const router = useRouter();
-  const pathname = usePathname();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
