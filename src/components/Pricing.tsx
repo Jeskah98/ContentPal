@@ -9,7 +9,7 @@ export default function DynamicPricing() {
   const plans = [
     {
       name: 'Starter',
-      price: annualBilling ? '$2,950' : '$295',
+      price: annualBilling ? '$3,564' : '$297',
       description: 'Perfect for individual creators',
       features: [
         'Single platform social media management with analytics',
@@ -21,7 +21,7 @@ export default function DynamicPricing() {
     },
     {
       name: 'Professional',
-      price: annualBilling ? '$5,950' : '$595',
+      price: annualBilling ? '$7,164' : '$597',
       description: 'For growing brands & agencies',
       features: [
         'Dual platform social media management with analytics',
@@ -37,7 +37,7 @@ export default function DynamicPricing() {
     },
     {
       name: 'Enterprise',
-      price: annualBilling ? '$10,950' : '$1950',
+      price: annualBilling ? '$13,164' : '$1,097',
       description: 'For large organizations',
       features: [
         '32 image posts interchangeable for platforms',

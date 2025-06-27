@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">ContentPal</h3>
           <p className="text-sm leading-relaxed">
-            Your AI-powered content creation assistant that helps you create engaging content efficiently.
+            Your AI-powered content creation tool that reinvents content creation and engagement.
           </p>
         </div>
 
@@ -17,7 +17,6 @@ export default function Footer() {
           <h4 className="text-lg font-semibold text-white mb-4">Product</h4>
           <ul>
             <li className="mb-2"><Link href="/casestudy" className="hover:text-white transition-colors duration-200">A Case Study</Link></li>
-            <li className="mb-2"><Link href="/subscribe" className="hover:text-white transition-colors duration-200">Pricing</Link></li>
           </ul>
         </div>
 
@@ -25,7 +24,6 @@ export default function Footer() {
         <div>
           <h4 className="text-lg font-semibold text-white mb-4">Company</h4>
           <ul>
-            <li className="mb-2"><Link href="/blog" className="hover:text-white transition-colors duration-200">Blog</Link></li>
             <li><Link href="/contact" className="hover:text-white transition-colors duration-200">Contact</Link></li>
           </ul>
         </div>
@@ -35,15 +33,13 @@ export default function Footer() {
           <h4 className="text-lg font-semibold text-white mb-4">Legal</h4>
           <ul>
             <li className="mb-2"><Link href="/faq" className="hover:text-white transition-colors duration-200">FAQ</Link></li>
-            <li className="mb-2"><Link href="/legal" className="hover:text-white transition-colors duration-200">Terms of Service</Link></li>
-            <li className="mb-2"><Link href="/legal" className="hover:text-white transition-colors duration-200">Privacy Policy</Link></li>
-            <li><Link href="/cookie" className="hover:text-white transition-colors duration-200">Cookie Policy</Link></li>
+            <li className="mb-2"><Link href="/legal" className="hover:text-white transition-colors duration-200">ToS & Privacy</Link></li>
           </ul>
         </div>
       </div>
 
       <div className="container mx-auto px-4 mt-8 border-t border-gray-700 pt-8 text-center text-sm">
-        <p>© 2025 ContentPal. All rights reserved.</p>
+        <p>© 2025 ContentPal.AI All rights reserved.</p>
         {/* Optional: Add social media links here later */}
         {/* <div className="flex justify-center space-x-4 mt-4">
           <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
