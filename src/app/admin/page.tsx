@@ -855,7 +855,7 @@ const handleGrantDashboardAccess = async (uid: string) => {
             <div className="flex justify-center py-8">
             </div>
           ) : selectedContentRequest ? (
-            <UploadDropzone<OurFileRouter>
+            <UploadDropzone<OurFileRouter, "contentUploader">
               endpoint="contentUploader"
               input={{ requestId: selectedContentRequest?.id || "" }}
               onClientUploadComplete={(res) => {

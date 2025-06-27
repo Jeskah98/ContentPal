@@ -42,8 +42,6 @@ export default function Dashboard() {
   const [userContentRequests, setUserContentRequests] = useState<ContentRequest[]>([]);
   const [fetchingUserContentRequests, setFetchingUserContentRequests] = useState(true);
   const [updatingApprovalStatus, setUpdatingApprovalStatus] = useState<string | null>(null);
-  const [generatedContentInput, setGeneratedContentInput] = useState(''); // State for the generated content textarea
-  const [uploadingContent, setUploadingContent] = useState(false); // State for tracking content upload loading
 
   useEffect(() => {
     const checkAccess = async () => {
