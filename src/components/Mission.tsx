@@ -1,7 +1,7 @@
 // components/Mission.tsx (New)
 export default function MissionStatement() {
     return (
-      <section className="py-24 bg-gradient-to-br from-gray-900 to-blue-900/30">
+      <section className="relative bg-gradient-to-b from-gray-900 to-gray-800 py-32 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
@@ -22,7 +22,7 @@ export default function MissionStatement() {
               </div>
             </div>
             
-            <p className="mt-16 text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-16 text-xl text-white max-w-3xl mx-auto leading-relaxed">
               At ContentPal, we're pioneering a new era of brand storytelling.  We offer a comprehensive suite of 
               AI-powered tools combined with human-inspired creativity to deliver content 
               that resonates, engages, and converts. Revolutionize your social media strategy, automate your tedious 

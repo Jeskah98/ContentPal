@@ -32,13 +32,13 @@ export default function HeroSection() {
             <Link href="/subscribe"               className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105">
                 Start Free Trial
             </Link>
-            <button className="flex items-center justify-center text-white hover:text-blue-300 gap-2 group">
-              <PlayCircle className="w-8 h-8 transition-transform group-hover:scale-110" />
-              <span className="text-lg">Watch Demo</span>
-            </button>
+            {/*//<button className="flex items-center justify-center text-white hover:text-blue-300 gap-2 group">
+              //<PlayCircle className="w-8 h-8 transition-transform group-hover:scale-110" />
+              //<span className="text-lg">Watch Demo</span>
+            //</button>*/}
           </motion.div>
 
-          <div className="mt-20 relative h-96 rounded-3xl overflow-hidden border border-gray-700/50 bg-gradient-to-r from-gray-800 to-gray-900">
+          {/*<div className="mt-20 relative h-96 rounded-3xl overflow-hidden border border-gray-700/50 bg-gradient-to-r from-gray-800 to-gray-900">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -55,10 +55,10 @@ export default function HeroSection() {
                 <source src="/videos/charle.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-              {/* Gradient overlay */}
+              {/* Gradient overlay 
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-gray-900/20 to-transparent" />
             </motion.div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </section>

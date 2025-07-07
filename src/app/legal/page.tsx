@@ -1,6 +1,7 @@
+'use client';
 export default function LegalPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 pt-32 pb-16 max-w-4xl">
       <h1 className="text-3xl font-bold mb-6">Legal Information</h1>
 
       <section className="mb-10">
@@ -97,7 +98,7 @@ export default function LegalPage() {
             <li>Request data portability</li>
           </ul>
           <p className="text-gray-700 mt-3">
-            To exercise these rights, contact <a href="mailto:privacy@contentpal.ai" className="text-blue-600 hover:underline">privacy@contentpal.ai</a>.
+            To exercise these rights, contact <a href="mailto:contentpal.ai@gmail.com" className="text-blue-600 hover:underline">contentpal.ai@gmail.com</a>.
           </p>
         </div>
 
