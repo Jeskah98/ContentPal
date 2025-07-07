@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
+import { time } from 'console';
 
 // Validate required environment variables
 if (!process.env.FIREBASE_PROJECT_ID || 
@@ -53,7 +54,8 @@ export async function POST(request: Request) {
       contentType, 
       targetAudience, 
       keyMessage, 
-      specificRequirements 
+      specificRequirements,
+      attachments = [] 
     } = await request.json();
 
     // Basic validation (optional but recommended)
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
       targetAudience, 
       keyMessage, 
       specificRequirements,
+      attachments,
       createdAt: new Date(), // Add a timestamp
       status: 'Pending', // Initial status, capital 'P' for consistency
       userId: userId, // Use the extracted user ID

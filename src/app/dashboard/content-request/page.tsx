@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/FloatingNav';
-import { Database } from 'lucide-react';
-
+import { UploadButton } from '@uploadthing/react';
+import type { OurFileRouter } from '@/app/api/uploadthing/core';
 export default function ContentRequestPage() {
   const { user } = useAuth(); // Moved to top level
   const router = useRouter();
@@ -28,6 +28,11 @@ export default function ContentRequestPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<{ url: string; name: string }[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [requestId, setRequestId] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "completed">("idle");
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +76,8 @@ export default function ContentRequestPage() {
       }
   
       const data = await response.json();
-      setSuccessMessage('Content request submitted successfully!');
+      setRequestId(data.id);
+      setSuccessMessage('Request created. Now upload files (if any).');
       
       // Optionally reset form
       setContentTopic('');
@@ -80,6 +86,7 @@ export default function ContentRequestPage() {
       setTargetAudience('');
       setKeyMessage('');
       setSpecificRequirements('');
+      setUploadedFiles([])
       console.log(data)
       
     } catch (error) {
@@ -205,6 +212,78 @@ export default function ContentRequestPage() {
                 placeholder="e.g., We need 5 variations of the social media post. Focus on urgency."
                 className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-white"
               ></textarea>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Attach Files (Optional)
+              </label>
+              
+              {requestId && (
+                <>
+                  <p className="text-green-700 font-medium my-2">✅ Form submitted — now upload your files (optional)</p>
+
+                  <UploadButton<OurFileRouter, "userFileUploader">
+                    endpoint="userFileUploader"
+                    input={{ requestId }}
+                    onClientUploadComplete={(res) => {
+                      if (res) {
+                        const newFiles = res.map(file => ({
+                          url: file.ufsUrl,
+                          name: file.name
+                        }));
+                        setUploadedFiles(prev => [...prev, ...newFiles]);
+                      }
+                      setUploadStatus("completed");
+                    }}
+                    onUploadBegin={() => {
+                      setUploadStatus("uploading");
+                    }}
+                    onUploadError={(error) => {
+                      console.error('Upload Error:', error);
+                      setError(`File upload failed: ${error.message}`);
+                      setUploadStatus("idle");
+                    }}
+                    className="uploadthing"
+                  />
+
+                  {uploadStatus === "uploading" && (
+                    <p className="text-blue-600 mt-2">Uploading files...</p>
+                  )}
+                  {uploadStatus === "completed" && (
+                    <p className="text-green-600 mt-2">✅ Files uploaded successfully</p>
+                  )}
+                </>
+              )}
+
+
+              {/* Uploaded files preview */}
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="text-sm font-medium text-gray-300 mb-1">Attached Files:</h3>
+                  <ul className="space-y-1">
+                    {uploadedFiles.map((file, index) => (
+                      <li key={index} className="flex items-center justify-between text-sm">
+                        <a 
+                          href={file.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:underline truncate max-w-[70%]"
+                        >
+                          {file.name}
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
+                          className="text-red-500 hover:text-red-400 ml-2"
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <button

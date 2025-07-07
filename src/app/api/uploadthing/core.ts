@@ -38,7 +38,9 @@ const db = getFirestore();
 export const ourFileRouter = {
   contentUploader: f({
     image: { maxFileSize: "4MB", maxFileCount: 10 },
-    text: { maxFileSize: "1MB" }
+    text: { maxFileSize: "1MB" },
+    video: { maxFileSize: "16MB" },
+    pdf: { maxFileSize: "8MB" }
   })
     .input(z.object({ requestId: z.string() }))
     .middleware(async ({ input }) => {
@@ -50,12 +52,38 @@ export const ourFileRouter = {
       const requestRef = db.collection("contentRequests").doc(requestId);
 
       await requestRef.update({
-        generatedContent: FieldValue.arrayUnion(file.url),
+        generatedContent: FieldValue.arrayUnion(file.ufsUrl),
         status: "Completed",
         updatedAt: FieldValue.serverTimestamp(),
       });
 
       console.log("Uploaded file URL added to Firestore:", file.ufsUrl);
+      return { url: file.ufsUrl };
+    }),
+
+      // User uploads to userFiles
+  userFileUploader: f({
+    image: { maxFileSize: "4MB", maxFileCount: 10 },
+    pdf: { maxFileSize: "8MB" },
+    text: { maxFileSize: "1MB" },
+    video: { maxFileSize: "16MB" },
+  })
+    .input(z.object({ requestId: z.string() }))
+    .middleware(async ({ input }) => {
+      if (!input.requestId) throw new UploadThingError("Missing request ID");
+      return input;
+    })
+    .onUploadComplete(async ({ file, metadata }) => {
+      const { requestId } = metadata;
+      const requestRef = db.collection("contentRequests").doc(requestId);
+
+      await requestRef.update({
+        userFiles: FieldValue.arrayUnion(file.ufsUrl),
+        status: "Pending",
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+
+      console.log("User file uploaded:", file.ufsUrl);
       return { url: file.ufsUrl };
     }),
 } satisfies FileRouter;

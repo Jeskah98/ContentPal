@@ -1,3 +1,4 @@
+'use client'
 // components/AuraHotelCaseStudy.jsx
 
 import React from 'react';
@@ -284,8 +285,8 @@ const AuraHotelCaseStudy = () => {
   );
 
   return (
-    <div className="font-sans antialiased bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
-      <header className="max-w-4xl mx-auto py-8 text-center">
+<div className="font-sans antialiased bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8 pt-24 mt-8"> 
+        <header className="max-w-4xl mx-auto py-8 text-center">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
           Case Study: The Aura Hotel
         </h1>
@@ -586,11 +587,16 @@ const AuraHotelCaseStudy = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {aiImages.map((image, index) => (
               <div key={index} className="flex flex-col items-center p-4 bg-gray-50 rounded-lg shadow-md">
-                <Image
-                  src={`/${image.src}`} // Assuming images are in the public directory of your Next.js project
-                  alt={image.alt}
-                  className="w-full h-auto rounded-lg object-cover mb-4 shadow-sm"
-                />
+                <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-4">
+                  <Image
+                    src={`/${image.src}`}
+                    alt={image.alt}
+                    width={500}  // Add width
+                    height={500} // Add height
+                    className="w-full h-full object-cover"
+                    priority={index === 0} // Add priority for first image
+                  />
+                </div>
                 <p className="text-center text-sm text-gray-600 italic">
                   Example: "{image.alt}" (This image could be enhanced through AI photo editing, e.g., for optimal lighting or mood.)
                 </p>
@@ -603,25 +609,20 @@ const AuraHotelCaseStudy = () => {
         <section className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">AI Video Creation</h2>
           <p className="text-lg text-gray-700 leading-relaxed mb-8">
-            Leveraging cutting-edge AI, we can generate dynamic video content for The Aura Hotel, from short social media clips
-            to engaging promotional videos. This includes synthesizing footage, generating voiceovers, adding intelligent transitions,
-            and incorporating music, all tailored to specific marketing campaigns and brand messaging. Imagine a virtual tour,
-            a residency highlight reel, or an immersive brand story, all created with minimal manual input.
+            Leveraging cutting-edge AI, we can generate dynamic video content for The Aura Hotel...
           </p>
-          <div className="flex justify-center">
-            {/* Placeholder for an actual AI-generated video. Using a generic YouTube embed as an example. */}
-            <iframe
-              width="560"
-              height="315"
-              src="videos/aura.mp4" // Placeholder video (Rick Astley) - replace with actual content
-              title="Placeholder AI Generated Video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="rounded-lg shadow-xl aspect-video w-full max-w-2xl"
-            ></iframe>
+          <div className="relative aspect-video w-full max-w-2xl mx-auto rounded-lg shadow-xl overflow-hidden">
+            <video 
+              controls 
+              className="w-full h-full object-cover"
+              poster="/videos/poster.jpg" // Add poster frame
+            >
+              <source src="/videos/aura.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
           <p className="text-center text-sm text-gray-600 italic mt-4">
-            (Placeholder video: This space would feature a compelling AI-generated video showcasing The Aura Hotel, its amenities, or residency experiences.)
+            (Placeholder video: This space would feature a compelling AI-generated video...)
           </p>
         </section>
 
